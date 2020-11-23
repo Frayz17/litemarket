@@ -1,8 +1,15 @@
-const Sequelize = require('sequelize');
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 
-const sequelize = new Sequelize('litemarketdb', 'your user', 'your password', {
-  dialect: 'mysql',
-  host: 'your host',
-});
+const mongoConnect = (cb) => {
+  MongoClient.connect(
+    'mongodb+srv://<username>:<password>@cluster0.lnfhh.mongodb.net/<dbname>?retryWrites=true&w=majority'
+  )
+    .then((client) => {
+      console.log('connected');
+      cb(client);
+    })
+    .catch((err) => console.log(err));
+};
 
-module.exports = sequelize;
+module.exports = mongoConnect;
