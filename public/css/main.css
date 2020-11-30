@@ -237,14 +237,15 @@ form {
   width: 90%;
   border: 1px solid cornflowerblue;
   border-radius: 3px;
-  padding: 1rem;
+  padding: 0.5rem;
   background-color: lightskyblue;
   text-align: center;
 }
 
 .user-message--error {
   border-color: indianred;
-  background: lightcoral;
+  background: #fdc0c0;
+  color: red;
 }
 
 @media (min-width: 768px) {
@@ -256,7 +257,7 @@ form {
     display: none;
   }
 
-  user-message {
+  .user-message {
     width: 30rem;
   }
 }
