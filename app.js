@@ -1,5 +1,5 @@
 const path = require('path');
-const MONGODB_URI = require('./util/connectString');
+const MONGODB_URI = require('./util/connectString').dbConnectString;
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
