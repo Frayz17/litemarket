@@ -100,7 +100,7 @@ exports.postSignup = (req, res, next) => {
           res.redirect('/login');
           return transporter.sendMail({
             to: email,
-            from: 'litemarket@example.com',
+            from: 'andrydmitriev@ukr.net',
             subject: 'Signup succeeded!',
             html: '<h1>You successfully signed up</h1>',
           });
@@ -141,7 +141,7 @@ exports.postReset = (req, res, next) => {
     User.findOne({ email: req.body.email })
       .then((user) => {
         if (!user) {
-          req.flash('err', 'No account with that email found.');
+          req.flash('error', 'No account with that email found.');
           return res.redirect('/reset');
         }
         user.resetToken = token;
@@ -152,7 +152,7 @@ exports.postReset = (req, res, next) => {
         res.redirect('/');
         transporter.sendMail({
           to: req.body.email,
-          from: 'litemarket@example.com',
+          from: 'andrydmitriev@ukr.net',
           subject: 'Password reset',
           html: `
             <p>You request a password reset</p>
@@ -162,4 +162,24 @@ exports.postReset = (req, res, next) => {
       })
       .catch((err) => console.log(err));
   });
+};
+
+exports.getNewPassword = (req, res, next) => {
+  const token = req.params.token;
+  User.find({ resetToken: token, resetTokenExpiration: { $gt: Date.now() } })
+    .then((user) => {
+      let message = req.flash('error');
+      if (message.length > 0) {
+        message = message[0];
+      } else {
+        message = null;
+      }
+      res.render('auth/new-password', {
+        path: '/new-password',
+        pageTitle: 'New Password',
+        errorMessage: message,
+        userId: user._id.toString(),
+      });
+    })
+    .catch((err) => console.log(err));
 };
