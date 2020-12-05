@@ -14,7 +14,23 @@ router.get('/reset', authController.getReset);
 
 router.post('/reset', authController.postReset);
 
-router.post('/login', authController.postLogin);
+router.post(
+  '/login',
+  [
+    body('email')
+      .isEmail()
+      .withMessage('Please enter a valid email')
+      .normalizeEmail(),
+    body(
+      'password',
+      'Please enter a password with only numbers and text an at least 5 and not more than 20 characters'
+    )
+      .isLength({ min: 5, max: 20 })
+      .isAlphanumeric()
+      .trim(),
+  ],
+  authController.postLogin
+);
 
 router.post(
   '/signup',
@@ -30,19 +46,23 @@ router.post(
             );
           }
         });
-      }),
+      })
+      .normalizeEmail(),
     body(
       'password',
       'Please enter a password with only numbers and text an at least 5 and not more than 20 characters'
     )
       .isLength({ min: 5, max: 20 })
-      .isAlphanumeric(),
-    body('confirmPassword').custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error('Passwords have to match!');
-      }
-      return true;
-    }),
+      .isAlphanumeric()
+      .trim(),
+    body('confirmPassword')
+      .trim()
+      .custom((value, { req }) => {
+        if (value !== req.body.password) {
+          throw new Error('Passwords have to match!');
+        }
+        return true;
+      }),
   ],
   authController.postSignup
 );
