@@ -25,7 +25,10 @@ exports.getLogin = (req, res, next) => {
     path: '/login',
     pageTitle: 'Login',
     errorMessage: message,
-    oldInput: { email: '', password: '' },
+    oldInput: {
+      email: '',
+      password: '',
+    },
     validationErrors: [],
   });
 };
@@ -35,13 +38,17 @@ exports.getSignup = (req, res, next) => {
   if (message.length > 0) {
     message = message[0];
   } else {
-    message = 0;
+    message = null;
   }
   res.render('auth/signup', {
     path: '/signup',
     pageTitle: 'Signup',
     errorMessage: message,
-    oldInput: { email: '', password: '', confirmPassword: '' },
+    oldInput: {
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
     validationErrors: [],
   });
 };
@@ -56,19 +63,25 @@ exports.postLogin = (req, res, next) => {
       path: '/login',
       pageTitle: 'Login',
       errorMessage: errors.array()[0].msg,
-      oldInput: { email, password },
+      oldInput: {
+        email,
+        password,
+      },
       validationErrors: errors.array(),
     });
   }
 
-  User.findOne({ email: email })
+  User.findOne({ email })
     .then((user) => {
       if (!user) {
         return res.status(422).render('auth/login', {
           path: '/login',
           pageTitle: 'Login',
           errorMessage: 'Invalid email or password.',
-          oldInput: { email, password },
+          oldInput: {
+            email,
+            password,
+          },
           validationErrors: [],
         });
       }
@@ -87,7 +100,10 @@ exports.postLogin = (req, res, next) => {
             path: '/login',
             pageTitle: 'Login',
             errorMessage: 'Invalid email or password.',
-            oldInput: { email, password },
+            oldInput: {
+              email,
+              password,
+            },
             validationErrors: [],
           });
         })
@@ -114,7 +130,11 @@ exports.postSignup = (req, res, next) => {
       path: '/signup',
       pageTitle: 'Signup',
       errorMessage: errors.array()[0].msg,
-      oldInput: { email, password, confirmPassword: req.body.comfirmPassword },
+      oldInput: {
+        email,
+        password,
+        confirmPassword: req.body.comfirmPassword,
+      },
       validationErrors: errors.array(),
     });
   }
